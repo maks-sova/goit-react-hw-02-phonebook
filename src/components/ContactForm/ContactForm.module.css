@@ -1,0 +1,13 @@
+.sting{
+    display: flex;
+    margin:10px;
+}
+.labelStyle{
+padding:10px;
+}
+.btn{
+padding:5px 20px;
+border-radius: 4px;
+border: none;
+cursor: pointer;
+}
