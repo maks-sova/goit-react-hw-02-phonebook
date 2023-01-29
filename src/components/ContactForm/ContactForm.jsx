@@ -2,7 +2,7 @@ import css from './ContactForm.module.css';
 import PropTypes from 'prop-types';
 export default function ContactForm() {
   return (
-    <div>
+    <div className={css.box}>
       <label for="name" className={css.labelStyle}>
         Name
         <input
