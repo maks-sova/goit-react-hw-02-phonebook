@@ -14,6 +14,15 @@ export class App extends React.Component {
     number: '',
   };
   render() {
+    const { contacts } = this.state;
+    const cols = contacts.map(({ name, number }) => (
+      <li>
+        {name}:{number}
+        <button type="button" className={css.btn}>
+          Delete
+        </button>
+      </li>
+    ));
     return (
       <div>
         <h1>Phonebook</h1>
@@ -47,14 +56,7 @@ export class App extends React.Component {
         <div className={css.box}>
           <label className={css.labelStyle}>Find contacts by name</label>
           <input type="text" className={css.sting} />
-          <ul>
-            <li>
-              Rose Simpson:459-12-56
-              <button type="button" className={css.btn}>
-                Delete
-              </button>
-            </li>
-          </ul>
+          <ul>{cols}</ul>
         </div>
       </div>
     );
