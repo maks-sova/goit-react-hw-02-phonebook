@@ -14,7 +14,10 @@ export class App extends React.Component {
     name: '',
     number: '',
   };
-  addContact = e => {};
+
+  addContact = e => {
+    e.preventDefault();
+  };
 
   render() {
     const { addContact } = this;
