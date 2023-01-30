@@ -17,10 +17,24 @@ export class App extends React.Component {
 
   addContact = e => {
     e.preventDefault();
+    this.setState(prevState => {
+      const { name, number, contacts } = prevState;
+      const newContact = {
+        id: nanoid(),
+        name,
+        number,
+      };
+      return { contacts: [newContact, ...contacts] };
+    });
   };
-
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    });
+  };
   render() {
-    const { addContact } = this;
+    const { addContact, handleChange } = this;
     const { contacts } = this.state;
     const cols = contacts.map(({ id, name, number }) => (
       <li key={id} className={css.liStyle}>
@@ -39,8 +53,9 @@ export class App extends React.Component {
               Name
             </label>
             <input
+              onChange={handleChange}
               className={css.sting}
-              id="name"
+              // id="name"
               type="text"
               name="name"
               pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -49,8 +64,9 @@ export class App extends React.Component {
             />
             <label className={css.labelStyle}>Number</label>
             <input
+              onChange={handleChange}
               className={css.sting}
-              id="name"
+              // id="name"
               type="tel"
               name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
