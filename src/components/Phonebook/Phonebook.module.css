@@ -20,12 +20,9 @@ border: none;
 cursor: pointer;
 margin-bottom: 10px;
 }
-.liStyle::before{
-content: "☎️";
-margin-right:20px;
 
+li::marker{
+content: "☎️";
 }
-.ulstyle{
-    list-style: none;
-    
-}
+
+
