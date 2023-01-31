@@ -14,17 +14,25 @@ export class App extends React.Component {
     name: '',
     number: '',
   };
-
+  removContact(id) {
+    this.setState(({ contacts }) => {
+      const newContacts = contacts.filter(contact => contact.id !== id);
+      return { contacts: newContacts };
+    });
+  }
   addContact = e => {
     e.preventDefault();
     this.setState(prevState => {
       const { name, number, contacts } = prevState;
+      if (this.isDublicate(name, number)) {
+        return alert(`${name}.Number:${number} is already ixist`);
+      }
       const newContact = {
         id: nanoid(),
         name,
         number,
       };
-      return { contacts: [newContact, ...contacts] };
+      return { contacts: [newContact, ...contacts], name: '', number: '' };
     });
   };
   handleChange = ({ target }) => {
@@ -33,13 +41,44 @@ export class App extends React.Component {
       [name]: value,
     });
   };
+  isDublicate(name, number) {
+    const normalizedName = name.toLowerCase();
+    const normalizedNumber = number.toLowerCase();
+    const { contacts } = this.state;
+    const contact = contacts.find(({ name, number }) => {
+      return (
+        name.toLowerCase() === normalizedName &&
+        number.toLowerCase() === normalizedNumber
+      );
+    });
+    return Boolean(contact);
+  }
+  getFilterContacts() {
+    const { filter, contacts } = this.state;
+    if (!filter) {
+      return contacts;
+    }
+    const normalizeFilter = filter.toLowerCase();
+    const result = contacts.filter(({ name, number }) => {
+      return (
+        name.toLowerCase().includes(normalizeFilter) ||
+        number.toLowerCase().includes(normalizeFilter)
+      );
+    });
+    return result;
+  }
   render() {
     const { addContact, handleChange } = this;
-    const { contacts } = this.state;
+    const { name, number } = this.state;
+    const contacts = this.getFilterContacts();
     const cols = contacts.map(({ id, name, number }) => (
       <li key={id} className={css.liStyle}>
         {name}:{number}
-        <button type="button" className={css.btn}>
+        <button
+          type="button"
+          className={css.btn}
+          onClick={() => this.removContact(id)}
+        >
           Delete
         </button>
       </li>
@@ -53,6 +92,7 @@ export class App extends React.Component {
               Name
             </label>
             <input
+              value={name}
               onChange={handleChange}
               className={css.sting}
               // id="name"
@@ -64,6 +104,7 @@ export class App extends React.Component {
             />
             <label className={css.labelStyle}>Number</label>
             <input
+              value={number}
               onChange={handleChange}
               className={css.sting}
               // id="name"
@@ -80,7 +121,12 @@ export class App extends React.Component {
         <h1>Contacts</h1>
         <div className={css.box}>
           <label className={css.labelStyle}>Find contacts by name</label>
-          <input type="text" className={css.sting} />
+          <input
+            type="text"
+            className={css.sting}
+            name="filter"
+            onChange={handleChange}
+          />
           <ul className={css.ulstyle}>{cols}</ul>
         </div>
       </div>
